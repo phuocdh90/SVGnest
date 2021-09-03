@@ -42,6 +42,7 @@
 		var best = null;
 		var workerTimer = null;
 		var progress = 0;
+		var parallels = [];
 		
 		this.parsesvg = function(svgstring){
 			// reset if in progress
@@ -337,6 +338,7 @@
 				},
 				evalPath: 'util/eval.js'
 			});
+			parallels.push(p);
 			
 			p.require('matrix.js');
 			p.require('geometryutil.js');
@@ -540,6 +542,7 @@
 					},
 					evalPath: 'util/eval.js'
 				});
+				parallels.push(p2);
 				
 				p2.require('json.js');
 				p2.require('clipper.js');
@@ -810,6 +813,8 @@
 		}
 		
 		this.stop = function(){
+			parallels.forEach(p => p.terminate());
+			parallels = [];
 			this.working = false;
 			if(workerTimer){
 				clearInterval(workerTimer);

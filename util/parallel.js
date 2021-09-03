@@ -84,6 +84,8 @@
 		this.operation.resolve(null, this.data);
 		this.requiredScripts = [];
 		this.requiredFunctions = [];
+		// store all spawned workers
+		this.wrks = [];
 	}
 
 	// static method
@@ -172,6 +174,7 @@
 			}
 		}
 
+		this.wrks.push(wrk);
 		return wrk;
 	};
 
@@ -381,6 +384,11 @@
 		this.operation = newOp;
 		return this;
 	};
+
+	Parallel.prototype.terminate = function () {
+		this.wrks.forEach(wrk => wrk.terminate());
+		this.wrks = [];
+	}
 
 	root.Parallel = Parallel;
 })(typeof window !== 'undefined' ? window : self);
